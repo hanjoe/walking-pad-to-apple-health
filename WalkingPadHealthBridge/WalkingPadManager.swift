@@ -122,6 +122,7 @@ final class WalkingPadManager: NSObject, ObservableObject {
 
     private var lastRawTotalSteps: Int
     private var lastReadingDate = Date.distantPast
+    private var lastParsedTotalSteps: Int?
 
     private let lastRawTotalStepsKey = "lastRawTotalSteps"
     private let sendIntervalKey = "sendIntervalSeconds"
@@ -469,13 +470,9 @@ private extension WalkingPadManager {
 
     func parseFTMS(_ data: Data) {
         // FitShow FS-BT-C1 style Treadmill Data on 2ACD.
-        // Vendor quirk: flag bit 0 == 0 means instantaneous speed IS present
-        // (opposite of the SIG convention). Layout observed on these pads:
-        //   [0..1] flags (LE)
-        //   [2..3] instantaneous speed, /100, km/h
-        //   [4..6] distance, meters
-        //   ...    remaining standard fields
-        //   tail   vendor trailer; final 2 bytes = cumulative step count (LE)
+        // Vendor layout: [0..1] flags, [2..3] speed /100 km/h, [4..6] distance m,
+        // then standard fields per flag bits 3..15, then a vendor trailer whose
+        // final 2 bytes are the cumulative step count (LE).
         let bytes = [UInt8](data)
         guard bytes.count >= 7 else {
             log("parseFTMS ignored short packet bytes=\(data.hexString)")
@@ -484,20 +481,51 @@ private extension WalkingPadManager {
 
         let flags = UInt16(bytes[0]) | (UInt16(bytes[1]) << 8)
 
-        // Instantaneous speed is always present on this family.
+        // Walk the standard fields (bits 3...15) to find where the trailer starts.
+        var offset = 7 // flags(2) + speed(2) + distance(3)
+        let fieldSizes: [(UInt16, Int)] = [
+            (0x0008, 4), // inclination + ramp angle
+            (0x0010, 2), // positive elevation gain
+            (0x0020, 2), // negative elevation gain
+            (0x0040, 2), // reserved
+            (0x0080, 1), // instantaneous pace
+            (0x0100, 1), // average pace
+            (0x0200, 2), // total energy
+            (0x0400, 2), // energy per hour
+            (0x0800, 1), // energy per minute
+            (0x1000, 1), // heart rate
+            (0x2000, 1), // metabolic equivalent
+            (0x4000, 2), // elapsed time
+            (0x8000, 2), // remaining time
+        ]
+        for (bit, size) in fieldSizes where flags & bit != 0 {
+            offset += size
+        }
+
+        let trailerLen = bytes.count - offset
+        guard trailerLen >= 2 else {
+            // Unexpected packet shape: the final 2 bytes are NOT the step field.
+            log("parseFTMS malformed shape: expected ≥\(offset + 2) bytes, got \(bytes.count), flags=0x\(String(flags, radix: 16)) — skipping steps raw=[\(data.hexString)]")
+            return
+        }
+
         let rawSpeed = UInt16(bytes[2]) | (UInt16(bytes[3]) << 8)
         let speedKmh = Double(rawSpeed) / 100.0
 
-        // Distance in meters (FitShow modules report meters directly).
         let rawDistance = (UInt32(bytes[4]) << 16) | (UInt32(bytes[5]) << 8) | UInt32(bytes[6])
         let distanceMeters = Double(rawDistance)
 
-        // Cumulative step count is the final little-endian uint16.
         let lo = bytes[bytes.count - 2]
         let hi = bytes[bytes.count - 1]
         let steps = Int(UInt16(lo) | (UInt16(hi) << 8))
 
-        log("parseFTMS flags=0x\(String(flags, radix: 16)) speed=\(String(format: "%.2f", speedKmh)) km/h distance=\(String(format: "%.0f", distanceMeters)) m steps=\(steps) raw=[\(data.hexString)]")
+        // Flag implausible counter jumps so the raw bytes can be reviewed later.
+        if let prev = lastParsedTotalSteps, steps - prev > 30 {
+            log("parseFTMS WARNING: step counter jump \(prev) -> \(steps) (+\(steps - prev)) trailerLen=\(trailerLen) raw=[\(data.hexString)]")
+        }
+        lastParsedTotalSteps = steps
+
+        log("parseFTMS flags=0x\(String(flags, radix: 16)) speed=\(String(format: "%.2f", speedKmh)) km/h distance=\(String(format: "%.0f", distanceMeters)) m steps=\(steps) trailerLen=\(trailerLen)")
 
         emit(steps: steps, distanceMeters: distanceMeters, speedKmh: speedKmh, source: "FTMS")
     }
