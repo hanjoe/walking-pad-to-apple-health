@@ -71,7 +71,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showConfig) {
-                ConfigSheet(padManager: padManager)
+                ConfigSheet(padManager: padManager, healthManager: healthManager)
             }
             .sheet(isPresented: $showDebugLog) {
                 DebugLogSheet(padManager: padManager)
@@ -172,7 +172,7 @@ struct ContentView: View {
                         Text("steps")
                             .font(.title3)
                             .foregroundStyle(.secondary)
-                        Text("estimated from distance")
+                        Text("integrated from speed")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -379,7 +379,9 @@ struct ContentView: View {
 // MARK: - Config sheet
 struct ConfigSheet: View {
     @ObservedObject var padManager: WalkingPadManager
+    @ObservedObject var healthManager: HealthKitManager
     @Environment(\.dismiss) private var dismiss
+    @State private var confirmDeleteHealthData = false
 
     var body: some View {
         NavigationStack {
@@ -412,6 +414,17 @@ struct ConfigSheet: View {
                             .font(.system(.body, design: .rounded).monospacedDigit())
                     }
                     Text("The pad reports no step count over FTMS, so steps are estimated as distance ÷ stride length. Calibrate by walking a known distance and adjusting until the step count matches.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Section("Maintenance") {
+                    Button(role: .destructive) {
+                        confirmDeleteHealthData = true
+                    } label: {
+                        Label("Delete all app data from Apple Health", systemImage: "trash")
+                    }
+                    Text("Removes every step sample this app has written — useful to clean up bad data.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -457,6 +470,11 @@ struct ConfigSheet: View {
             }
             .navigationTitle("Configuration")
             .navigationBarTitleDisplayMode(.inline)
+            .confirmationDialog("Delete every step sample this app wrote to Apple Health?", isPresented: $confirmDeleteHealthData, titleVisibility: .visible) {
+                Button("Delete all samples", role: .destructive) {
+                    healthManager.deleteAllStepSamplesFromThisApp()
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {

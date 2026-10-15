@@ -130,6 +130,11 @@ final class WalkingPadManager: NSObject, ObservableObject {
     private var lastRawTotalSteps: Int
     private var lastReadingDate = Date.distantPast
 
+    // Speed-integrated session totals (speed is the only verified-correct field).
+    private var integratedSteps: Double = 0
+    private var integratedDistanceMeters: Double = 0
+    private var lastPacketDate: Date?
+
     private let lastRawTotalStepsKey = "lastRawTotalSteps"
     private let sendIntervalKey = "sendIntervalSeconds"
 
@@ -304,6 +309,7 @@ extension WalkingPadManager: CBCentralManagerDelegate {
             self.writeCharacteristic = nil
             self.detectedProtocol = .unknown
             self.statusText = error != nil ? "Disconnected: \(error!.localizedDescription)" : "Disconnected"
+            self.lastPacketDate = nil
             // Auto-reconnect after a short delay if this was an accidental drop.
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
                 guard let self, !self.isConnected else { return }
@@ -538,10 +544,21 @@ private extension WalkingPadManager {
         }
         log("parseFTMS flags=0x\(String(flags, radix: 16)) speed=\(String(format: "%.2f", speedKmh)) km/h distance=\(String(format: "%.0f", distanceMeters)) m trailer=\(trailerValue) (≈session s) candidates=[\(candidates.joined(separator: ", "))]")
 
-        // The trailer uint16 does not scale with speed (it is elapsed seconds),
-        // so estimate cumulative steps from the distance: steps = distance / stride.
-        let estimatedSteps = distanceMeters / strideLengthMeters
-        emit(steps: Int(estimatedSteps), distanceMeters: distanceMeters, speedKmh: speedKmh, source: "FTMS")
+        // The raw distance field cannot be trusted (its byte position varies
+        // between packet shapes), so derive distance and steps by integrating
+        // the verified-correct speed over time.
+        let now = Date()
+        if let last = lastPacketDate {
+            let dt = min(now.timeIntervalSince(last), 5.0)
+            let speedMps = speedKmh / 3.6
+            integratedDistanceMeters += speedMps * dt
+            integratedSteps += speedMps * dt / strideLengthMeters
+        }
+        lastPacketDate = now
+
+        log("parseFTMS flags=0x\(String(flags, radix: 16)) speed=\(String(format: "%.2f", speedKmh)) km/h rawDistanceField=\(String(format: "%.0f", distanceMeters)) integratedDist=\(String(format: "%.0f", integratedDistanceMeters)) m integratedSteps=\(Int(integratedSteps)) trailer=\(trailerValue)")
+
+        emit(steps: Int(integratedSteps), distanceMeters: integratedDistanceMeters, speedKmh: speedKmh, source: "FTMS")
     }
 
     /// FitShow family (FFF1 notify). Stub for now: log raw bytes for analysis.
