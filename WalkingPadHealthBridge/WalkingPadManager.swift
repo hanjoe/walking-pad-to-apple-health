@@ -522,12 +522,14 @@ private extension WalkingPadManager {
 
         let delta = steps - lastRawTotalSteps
         guard delta > 0 else { return }
-        lastRawTotalSteps = steps
-        UserDefaults.standard.set(steps, forKey: lastRawTotalStepsKey)
 
         let now = Date()
         // Throttle emissions to the configured send interval.
         guard now.timeIntervalSince(lastReadingDate) >= sendIntervalSeconds else { return }
+
+        // Only commit the new baseline when we actually emit a sample.
+        lastRawTotalSteps = steps
+        UserDefaults.standard.set(steps, forKey: lastRawTotalStepsKey)
 
         let startDate = lastReadingDate == Date.distantPast ? now : lastReadingDate
         lastReadingDate = now
