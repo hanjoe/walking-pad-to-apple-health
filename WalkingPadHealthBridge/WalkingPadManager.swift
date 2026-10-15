@@ -123,6 +123,8 @@ final class WalkingPadManager: NSObject, ObservableObject {
     private var lastRawTotalSteps: Int
     private var lastReadingDate = Date.distantPast
     private var lastParsedTotalSteps: Int?
+    /// Suspicious counter jump awaiting confirmation by the next packet.
+    private var pendingSuspiciousSteps: Int?
 
     private let lastRawTotalStepsKey = "lastRawTotalSteps"
     private let sendIntervalKey = "sendIntervalSeconds"
@@ -519,9 +521,22 @@ private extension WalkingPadManager {
         let hi = bytes[bytes.count - 1]
         let steps = Int(UInt16(lo) | (UInt16(hi) << 8))
 
-        // Flag implausible counter jumps so the raw bytes can be reviewed later.
-        if let prev = lastParsedTotalSteps, steps - prev > 30 {
-            log("parseFTMS WARNING: step counter jump \(prev) -> \(steps) (+\(steps - prev)) trailerLen=\(trailerLen) raw=[\(data.hexString)]")
+        // Debounce implausible counter jumps: the device sometimes sends a bad
+        // value once and recovers on the next packet. Hold the jump for one
+        // packet; accept it if the next packet confirms, discard if it reverts.
+        if let pending = pendingSuspiciousSteps {
+            pendingSuspiciousSteps = nil
+            if steps >= pending - 5 {
+                log("parseFTMS counter jump confirmed at \(steps) — treating as genuine")
+            } else {
+                log("parseFTMS discarded outlier packet (claimed \(pending), device now reports \(steps)) raw=[\(data.hexString)]")
+                lastParsedTotalSteps = steps
+                return
+            }
+        } else if let prev = lastParsedTotalSteps, steps - prev > 30 {
+            pendingSuspiciousSteps = steps
+            log("parseFTMS holding suspicious counter jump \(prev) -> \(steps) (+\(steps - prev)) pending confirmation raw=[\(data.hexString)]")
+            return
         }
         lastParsedTotalSteps = steps
 
