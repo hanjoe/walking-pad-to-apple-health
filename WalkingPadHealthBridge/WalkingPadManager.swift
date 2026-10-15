@@ -93,6 +93,13 @@ final class WalkingPadManager: NSObject, ObservableObject {
         }
     }
 
+    /// Stride length used to estimate steps from distance (metres).
+    @Published var strideLengthMeters: Double {
+        didSet {
+            UserDefaults.standard.set(strideLengthMeters, forKey: "strideLengthMeters")
+        }
+    }
+
     private let maxRecentReadings = 20
     private let maxDebugLogEntries = 300
 
@@ -122,9 +129,6 @@ final class WalkingPadManager: NSObject, ObservableObject {
 
     private var lastRawTotalSteps: Int
     private var lastReadingDate = Date.distantPast
-    private var lastParsedTotalSteps: Int?
-    /// Suspicious counter jump awaiting confirmation by the next packet.
-    private var pendingSuspiciousSteps: Int?
 
     private let lastRawTotalStepsKey = "lastRawTotalSteps"
     private let sendIntervalKey = "sendIntervalSeconds"
@@ -133,6 +137,8 @@ final class WalkingPadManager: NSObject, ObservableObject {
         lastRawTotalSteps = UserDefaults.standard.integer(forKey: lastRawTotalStepsKey)
         let stored = UserDefaults.standard.double(forKey: sendIntervalKey)
         sendIntervalSeconds = stored > 0 ? stored : 5.0
+        let storedStride = UserDefaults.standard.double(forKey: "strideLengthMeters")
+        strideLengthMeters = storedStride > 0 ? storedStride : 0.7
         super.init()
         centralManager = CBCentralManager(delegate: self, queue: DispatchQueue.global(qos: .userInitiated))
     }
@@ -519,30 +525,23 @@ private extension WalkingPadManager {
 
         let lo = bytes[bytes.count - 2]
         let hi = bytes[bytes.count - 1]
-        let steps = Int(UInt16(lo) | (UInt16(hi) << 8))
+        let trailerValue = Int(UInt16(lo) | (UInt16(hi) << 8))
 
-        // Debounce implausible counter jumps: the device sometimes sends a bad
-        // value once and recovers on the next packet. Hold the jump for one
-        // packet; accept it if the next packet confirms, discard if it reverts.
-        if let pending = pendingSuspiciousSteps {
-            pendingSuspiciousSteps = nil
-            if steps >= pending - 5 {
-                log("parseFTMS counter jump confirmed at \(steps) — treating as genuine")
-            } else {
-                log("parseFTMS discarded outlier packet (claimed \(pending), device now reports \(steps)) raw=[\(data.hexString)]")
-                lastParsedTotalSteps = steps
-                return
-            }
-        } else if let prev = lastParsedTotalSteps, steps - prev > 30 {
-            pendingSuspiciousSteps = steps
-            log("parseFTMS holding suspicious counter jump \(prev) -> \(steps) (+\(steps - prev)) pending confirmation raw=[\(data.hexString)]")
-            return
+        // Log every uint16 candidate in the trailer so a real step field can be
+        // identified from captured traffic later, if one exists.
+        var candidates: [String] = []
+        var i = offset
+        while i + 2 <= bytes.count {
+            let v = UInt16(bytes[i]) | (UInt16(bytes[i + 1]) << 8)
+            candidates.append("u16@\(i)=\(v)")
+            i += 1
         }
-        lastParsedTotalSteps = steps
+        log("parseFTMS flags=0x\(String(flags, radix: 16)) speed=\(String(format: "%.2f", speedKmh)) km/h distance=\(String(format: "%.0f", distanceMeters)) m trailer=\(trailerValue) (≈session s) candidates=[\(candidates.joined(separator: ", "))]")
 
-        log("parseFTMS flags=0x\(String(flags, radix: 16)) speed=\(String(format: "%.2f", speedKmh)) km/h distance=\(String(format: "%.0f", distanceMeters)) m steps=\(steps) trailerLen=\(trailerLen)")
-
-        emit(steps: steps, distanceMeters: distanceMeters, speedKmh: speedKmh, source: "FTMS")
+        // The trailer uint16 does not scale with speed (it is elapsed seconds),
+        // so estimate cumulative steps from the distance: steps = distance / stride.
+        let estimatedSteps = distanceMeters / strideLengthMeters
+        emit(steps: Int(estimatedSteps), distanceMeters: distanceMeters, speedKmh: speedKmh, source: "FTMS")
     }
 
     /// FitShow family (FFF1 notify). Stub for now: log raw bytes for analysis.

@@ -172,7 +172,7 @@ struct ContentView: View {
                         Text("steps")
                             .font(.title3)
                             .foregroundStyle(.secondary)
-                        Text("session total from pad")
+                        Text("estimated from distance")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -396,6 +396,22 @@ struct ConfigSheet: View {
                             .font(.system(.body, design: .rounded).monospacedDigit())
                     }
                     Text("A new step sample is written to Apple Health at most once every \(Int(padManager.sendIntervalSeconds)) seconds while the pad is moving.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Section("Step estimation") {
+                    HStack {
+                        Slider(
+                            value: $padManager.strideLengthMeters,
+                            in: 0.4...1.0,
+                            step: 0.05
+                        )
+                        Text(String(format: "%.2f m", padManager.strideLengthMeters))
+                            .frame(minWidth: 50)
+                            .font(.system(.body, design: .rounded).monospacedDigit())
+                    }
+                    Text("The pad reports no step count over FTMS, so steps are estimated as distance ÷ stride length. Calibrate by walking a known distance and adjusting until the step count matches.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
