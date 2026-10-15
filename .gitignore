@@ -4,6 +4,11 @@
 
 ## User settings
 xcuserdata/
+*.xcuserdata
+*.xcworkspace
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
 
 ## Obj-C/Swift specific
 *.hmap
@@ -12,10 +17,15 @@ xcuserdata/
 *.ipa
 *.dSYM.zip
 *.dSYM
+*.app
 
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
+
+## Build artefacts
+DerivedData/
+build/
 
 # Swift Package Manager
 #
@@ -38,9 +48,6 @@ playground.xcworkspace
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 #
 # Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
 
 # Carthage
 #
@@ -60,3 +67,7 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+.fastlane/
+
+# macOS
+.DS_Store

@@ -1,0 +1,372 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E5C8A4A2EDBB5FC404AA63C /* WalkingPadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C32A8DC62EE76A60861815 /* WalkingPadManager.swift */; };
+		0FCF7CBBAD00CA53AA52F531 /* WalkingPadHealthBridgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FBB45C8D88F332FB7CAAC2 /* WalkingPadHealthBridgeApp.swift */; };
+		2815F0F127B74C20A8C3BE74 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2C84B05999ADF4174541D1 /* HealthKitManager.swift */; };
+		3244A721D22D2FE4DF8BB059 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8842240994993839BBDEBBD3 /* SessionStore.swift */; };
+		3888AEED807FF6098AE1F57C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5817507FB2DDD0F789D45EDD /* ContentView.swift */; };
+		98D72BF1A38CDB40C10AA74F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49A248475F058A95D38A950D /* Foundation.framework */; };
+		D59867CE129A36496D40EA41 /* WalkingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96545C0F2A7D74FD7F1818FE /* WalkingSession.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		14FBB45C8D88F332FB7CAAC2 /* WalkingPadHealthBridgeApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WalkingPadHealthBridgeApp.swift; sourceTree = "<group>"; };
+		173D659B3AE3D5A11D059BAE /* WalkingPadHealthBridge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalkingPadHealthBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		49A248475F058A95D38A950D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		4D2C84B05999ADF4174541D1 /* HealthKitManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		5817507FB2DDD0F789D45EDD /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7C81519B63054AA0AFF3B306 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8842240994993839BBDEBBD3 /* SessionStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
+		96545C0F2A7D74FD7F1818FE /* WalkingSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WalkingSession.swift; sourceTree = "<group>"; };
+		C6C32A8DC62EE76A60861815 /* WalkingPadManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WalkingPadManager.swift; sourceTree = "<group>"; };
+		E33EF579CFF4FAE6970E8032 /* WalkingPadHealthBridge.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = WalkingPadHealthBridge.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		13E02103632E0BB3B22959AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98D72BF1A38CDB40C10AA74F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1323E5A41860FDB14726CAB0 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				49A248475F058A95D38A950D /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		652F08BDD360736A584B2314 = {
+			isa = PBXGroup;
+			children = (
+				9E62954B30DFD009D7408006 /* Products */,
+				8EF800443972722F61049E97 /* Frameworks */,
+				D000FDD79AC2B9F91044A10B /* WalkingPadHealthBridge */,
+			);
+			sourceTree = "<group>";
+		};
+		8EF800443972722F61049E97 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1323E5A41860FDB14726CAB0 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9E62954B30DFD009D7408006 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				173D659B3AE3D5A11D059BAE /* WalkingPadHealthBridge.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D000FDD79AC2B9F91044A10B /* WalkingPadHealthBridge */ = {
+			isa = PBXGroup;
+			children = (
+				14FBB45C8D88F332FB7CAAC2 /* WalkingPadHealthBridgeApp.swift */,
+				5817507FB2DDD0F789D45EDD /* ContentView.swift */,
+				C6C32A8DC62EE76A60861815 /* WalkingPadManager.swift */,
+				4D2C84B05999ADF4174541D1 /* HealthKitManager.swift */,
+				7C81519B63054AA0AFF3B306 /* Info.plist */,
+				E33EF579CFF4FAE6970E8032 /* WalkingPadHealthBridge.entitlements */,
+				96545C0F2A7D74FD7F1818FE /* WalkingSession.swift */,
+				8842240994993839BBDEBBD3 /* SessionStore.swift */,
+			);
+			path = WalkingPadHealthBridge;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F429D1C04112872B5E9505CC /* WalkingPadHealthBridge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A81EB0EDFC15D164F1B3AD1 /* Build configuration list for PBXNativeTarget "WalkingPadHealthBridge" */;
+			buildPhases = (
+				7428BF802460E62166DE1EFC /* Sources */,
+				13E02103632E0BB3B22959AE /* Frameworks */,
+				3DB9974EAF23E2C0BEC819A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WalkingPadHealthBridge;
+			productName = WalkingPadHealthBridge;
+			productReference = 173D659B3AE3D5A11D059BAE /* WalkingPadHealthBridge.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		96D4E44E48B580985174F445 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					F429D1C04112872B5E9505CC = {
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 0F69E1D015EDFF59B08C4F08 /* Build configuration list for PBXProject "WalkingPadHealthBridge" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 652F08BDD360736A584B2314;
+			productRefGroup = 9E62954B30DFD009D7408006 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F429D1C04112872B5E9505CC /* WalkingPadHealthBridge */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3DB9974EAF23E2C0BEC819A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7428BF802460E62166DE1EFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FCF7CBBAD00CA53AA52F531 /* WalkingPadHealthBridgeApp.swift in Sources */,
+				3888AEED807FF6098AE1F57C /* ContentView.swift in Sources */,
+				0E5C8A4A2EDBB5FC404AA63C /* WalkingPadManager.swift in Sources */,
+				2815F0F127B74C20A8C3BE74 /* HealthKitManager.swift in Sources */,
+				D59867CE129A36496D40EA41 /* WalkingSession.swift in Sources */,
+				3244A721D22D2FE4DF8BB059 /* SessionStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		367A4D5C442DD9DA559001D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		803115F54141CB3583EF4DD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = WalkingPadHealthBridge/WalkingPadHealthBridge.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = WalkingPadHealthBridge/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.WalkingPadHealthBridge;
+				PRODUCT_NAME = WalkingPadHealthBridge;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		83A6F29F32E20F6277CAAFDC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		877E23D8D579D825D2779F72 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = WalkingPadHealthBridge/WalkingPadHealthBridge.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = WalkingPadHealthBridge/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.WalkingPadHealthBridge;
+				PRODUCT_NAME = WalkingPadHealthBridge;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0F69E1D015EDFF59B08C4F08 /* Build configuration list for PBXProject "WalkingPadHealthBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				367A4D5C442DD9DA559001D8 /* Debug */,
+				83A6F29F32E20F6277CAAFDC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A81EB0EDFC15D164F1B3AD1 /* Build configuration list for PBXNativeTarget "WalkingPadHealthBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				877E23D8D579D825D2779F72 /* Release */,
+				803115F54141CB3583EF4DD3 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 96D4E44E48B580985174F445 /* Project object */;
+}
